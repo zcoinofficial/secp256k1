@@ -9,7 +9,12 @@ JNI_LIB =
 endif
 include_HEADERS = include/secp256k1.h
 include_HEADERS += include/secp256k1_preallocated.h
+include_HEADERS += include/secp256k1.hpp
+include_HEADERS += include/secp256k1_ecmult.hpp
+include_HEADERS += include/secp256k1_group.hpp
+include_HEADERS += include/secp256k1_scalar.hpp
 noinst_HEADERS =
+noinst_HEADERS += src/secp256k1.h
 noinst_HEADERS += src/scalar.h
 noinst_HEADERS += src/scalar_4x64.h
 noinst_HEADERS += src/scalar_8x32.h
@@ -40,6 +45,11 @@ noinst_HEADERS += src/field_5x52.h
 noinst_HEADERS += src/field_5x52_impl.h
 noinst_HEADERS += src/field_5x52_int128_impl.h
 noinst_HEADERS += src/field_5x52_asm_impl.h
+noinst_HEADERS += src/cpp/ecmult.hpp
+noinst_HEADERS += src/cpp/group.hpp
+noinst_HEADERS += src/cpp/num.hpp
+noinst_HEADERS += src/cpp/scalar.hpp
+noinst_HEADERS += src/cpp/secp256k1.hpp
 noinst_HEADERS += src/java/org_bitcoin_NativeSecp256k1.h
 noinst_HEADERS += src/java/org_bitcoin_Secp256k1Context.h
 noinst_HEADERS += src/util.h
@@ -73,7 +83,7 @@ libsecp256k1_common_la_SOURCES = src/asm/field_10x26_arm.s
 endif
 endif
 
-libsecp256k1_la_SOURCES = src/secp256k1.c
+libsecp256k1_la_SOURCES = src/secp256k1.c src/cpp/secp256k1.cpp src/cpp/scalar.cpp src/cpp/group.cpp src/cpp/ecmult.cpp
 libsecp256k1_la_CPPFLAGS = -DSECP256K1_BUILD -I$(top_srcdir)/include -I$(top_srcdir)/src $(SECP_INCLUDES)
 libsecp256k1_la_LIBADD = $(JNI_LIB) $(SECP_LIBS) $(COMMON_LIB)
 
@@ -106,6 +116,16 @@ endif
 tests_LDADD = $(SECP_LIBS) $(SECP_TEST_LIBS) $(COMMON_LIB)
 tests_LDFLAGS = -static
 TESTS += tests
+
+noinst_PROGRAMS += cpp_tests
+cpp_tests_SOURCES = src/cpp/tests.cpp
+cpp_tests_CPPFLAGS = -DSECP256K1_BUILD -I$(top_srcdir)/src -I$(top_srcdir)/include $(SECP_INCLUDES) $(SECP_TEST_INCLUDES)
+if !ENABLE_COVERAGE
+cpp_tests_CPPFLAGS += -DVERIFY
+endif
+cpp_tests_LDADD = libsecp256k1.la $(SECP_LIBS) $(SECP_TEST_LIBS) $(COMMON_LIB)
+cpp_tests_LDFLAGS = -static
+TESTS += cpp_tests
 endif
 
 if USE_EXHAUSTIVE_TESTS
