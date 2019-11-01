@@ -1,6 +1,10 @@
 #ifndef SECP256K1_SECP256K1_H
 #define SECP256K1_SECP256K1_H
 
+#ifdef HAVE_CONFIG_H
+#include "libsecp256k1-config.h"
+#endif
+
 #include "ecmult.h"
 #include "ecmult_gen.h"
 #include "util.h"
