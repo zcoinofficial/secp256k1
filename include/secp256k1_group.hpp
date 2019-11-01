@@ -54,7 +54,7 @@ public:
     std::string GetHex() const;
     std::string tostring(unsigned base = 10) const;
 
-    constexpr size_t memoryRequired() const { return serialize_size; }
+    size_t memoryRequired() const { return serialize_size; }
     unsigned char * serialize() const;
     unsigned char * serialize(unsigned char *buffer) const;
     const unsigned char * deserialize(const unsigned char *buffer);
@@ -63,14 +63,14 @@ public:
 
     template<typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const {
-        unsigned char buffer[memoryRequired()];
+        unsigned char buffer[serialize_size];
         serialize(buffer);
         s.write(buffer, sizeof(buffer));
     }
 
     template<typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion) {
-        unsigned char buffer[memoryRequired()];
+        unsigned char buffer[serialize_size];
         s.read(buffer, sizeof(buffer));
         deserialize(buffer);
     }

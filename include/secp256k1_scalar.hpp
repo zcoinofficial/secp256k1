@@ -17,6 +17,9 @@ namespace secp_primitives {
  **/
 class Scalar final {
 public:
+    static constexpr size_t serialize_size = 32;
+
+public:
     struct Data;
 
 public:
@@ -63,24 +66,24 @@ public:
     std::string GetHex() const;
     std::string tostring(unsigned base = 10) const;
 
-    constexpr size_t memoryRequired() const { return 32; }
+    size_t memoryRequired() const { return serialize_size; }
     unsigned char * serialize(unsigned char *buffer) const;
     const unsigned char * deserialize(const unsigned char *buffer);
 
-    constexpr unsigned GetSerializeSize(int nType = 0, int nVersion = 0) const {
+    unsigned GetSerializeSize(int nType = 0, int nVersion = 0) const {
         return memoryRequired();
     }
 
     template<typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const {
-        unsigned char buffer[memoryRequired()];
+        unsigned char buffer[serialize_size];
         serialize(buffer);
         s.write(reinterpret_cast<char *>(buffer), sizeof(buffer));
     }
 
     template<typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion) {
-        unsigned char buffer[memoryRequired()];
+        unsigned char buffer[serialize_size];
         s.read(reinterpret_cast<char *>(buffer), sizeof(buffer));
         deserialize(buffer);
     }
