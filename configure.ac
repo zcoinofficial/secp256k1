@@ -31,6 +31,9 @@ if test x"$ac_cv_prog_cc_c89" = x"no"; then
 fi
 AM_PROG_AS
 
+AC_PROG_CXX
+AX_CXX_COMPILE_STDCXX([11], [noext], [mandatory])
+
 case $host_os in
   *darwin*)
      if  test x$cross_compiling != xyes; then
@@ -115,9 +118,9 @@ AC_ARG_ENABLE(exhaustive_tests,
     [use_exhaustive_tests=yes])
 
 AC_ARG_ENABLE(endomorphism,
-    AS_HELP_STRING([--enable-endomorphism],[enable endomorphism [default=no]]),
+    AS_HELP_STRING([--disable-endomorphism],[disable endomorphism [default=yes]]),
     [use_endomorphism=$enableval],
-    [use_endomorphism=no])
+    [use_endomorphism=yes])
 
 AC_ARG_ENABLE(ecmult_static_precomputation,
     AS_HELP_STRING([--enable-ecmult-static-precomputation],[enable precomputed ecmult table for signing [default=auto]]),

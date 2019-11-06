@@ -20,6 +20,8 @@
 #include "hash_impl.h"
 #include "scratch_impl.h"
 
+#include "secp256k1.h"
+
 #define ARG_CHECK(cond) do { \
     if (EXPECT(!(cond), 0)) { \
         secp256k1_callback_call(&ctx->illegal_callback, #cond); \
@@ -59,13 +61,6 @@ static const secp256k1_callback default_illegal_callback = {
 static const secp256k1_callback default_error_callback = {
     secp256k1_default_error_callback_fn,
     NULL
-};
-
-struct secp256k1_context_struct {
-    secp256k1_ecmult_context ecmult_ctx;
-    secp256k1_ecmult_gen_context ecmult_gen_ctx;
-    secp256k1_callback illegal_callback;
-    secp256k1_callback error_callback;
 };
 
 static const secp256k1_context secp256k1_context_no_precomp_ = {
