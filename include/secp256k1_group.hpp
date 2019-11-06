@@ -65,13 +65,13 @@ public:
     void Serialize(Stream& s, int nType, int nVersion) const {
         unsigned char buffer[serialize_size];
         serialize(buffer);
-        s.write(buffer, sizeof(buffer));
+        s.write(reinterpret_cast<char *>(buffer), sizeof(buffer));
     }
 
     template<typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion) {
         unsigned char buffer[serialize_size];
-        s.read(buffer, sizeof(buffer));
+        s.read(reinterpret_cast<char *>(buffer), sizeof(buffer));
         deserialize(buffer);
     }
 
